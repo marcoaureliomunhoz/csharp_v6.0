@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiposBasicos1", "TiposBasic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetodoComParams", "MetodoComParams\MetodoComParams.csproj", "{21FBA03F-A18E-4779-BF17-BAFA3527A033}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetorMatriz1", "VetorMatriz1\VetorMatriz1.csproj", "{FECF27E8-4FE2-4237-B523-1E5932011AA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECF27E8-4FE2-4237-B523-1E5932011AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECF27E8-4FE2-4237-B523-1E5932011AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECF27E8-4FE2-4237-B523-1E5932011AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECF27E8-4FE2-4237-B523-1E5932011AA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

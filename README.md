@@ -235,3 +235,39 @@ Somar(3,8,9,2,3);
 
 > O recurso _params_ pode ser usado com outros parâmetros, porém o parâmetro _params_ deve ser sempre o último.
 
+**Vetor e Matriz:** recurso que serve para armazenar vários dados do mesmo tipo. Os dados podem ser armazenados de forma **unidimensional** (array/vetor), de forma **bidimensional** (matriz) ou de forma **multidimensional**. Diferentemente de outras linguagens como C e C++, em C# **arrays** são objetos da classe **System.Array** e não apenas regiões endereçáveis de memória contígua.
+
+- Membros da classe **System.Array**:
+    - **Length:** propriedade que retorna o número total de elementos de todas as dimensões de um array.
+    - **Rank:** propriedade que retorna o número de dimensões de um array.
+    - **GetLength(**_dimensao_**):** método que retorna o número total de elementos de uma dada _dimensão_.
+    - **Reverse(**_array_**):** método estático que inverte a ordem dos elementos de um dado _array_. Essa inversão pode ser completa ou parcial.
+    - **Sort(**_array_**):** método estático que ordena um dado _array_.
+
+
+- Declarando **arrays**:
+
+```csharp
+//declarando vetor com inicialização
+int[] mesesAno = {1,2,3,4,5,6,7,8,9,10,11,12};
+
+//declarando vetor sem inicialização
+string[] diasSemana = new string[12];
+diasSemana[0] = "dom";
+diasSemana[1] = "seg";
+diasSemana[2] = "ter";
+diasSemana[3] = "qua";
+diasSemana[4] = "qui";
+diasSemana[5] = "sex";
+diasSemana[6] = "sab";
+
+//declarando matriz com inicialização
+int[,] quadrado1 = {{10,11} , {50,51}};
+
+//declarando matriz sem inicialização
+int[,] quadrado2 = new int[2,2];
+triangulo[0,0] = 10;
+triangulo[0,1] = 11;
+triangulo[1,0] = 50;
+triangulo[1,1] = 51;
+```
