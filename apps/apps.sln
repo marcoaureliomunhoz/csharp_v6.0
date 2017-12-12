@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClasseObject1", "ClasseObje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiposBasicos1", "TiposBasicos1\TiposBasicos1.csproj", "{B460415E-0643-4647-80C0-E6CCFE3A2EF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetodoComParams", "MetodoComParams\MetodoComParams.csproj", "{21FBA03F-A18E-4779-BF17-BAFA3527A033}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B460415E-0643-4647-80C0-E6CCFE3A2EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B460415E-0643-4647-80C0-E6CCFE3A2EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B460415E-0643-4647-80C0-E6CCFE3A2EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FBA03F-A18E-4779-BF17-BAFA3527A033}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

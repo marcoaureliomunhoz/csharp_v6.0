@@ -162,7 +162,7 @@ var nome = "marco";
 <struct_nome> variavel = new <struct_nome>([parametros_do_construtor]);
 ```
 
-**Enum:** enum é um tipo de dado para lista de constantes. Por padrão as constantes são associados a valores inteiros, mas é possível mudar, o que por sua vez exige o uso de **cast explícito**.
+**enum:** enum é um tipo de dado para lista de constantes. Por padrão as constantes são associados a valores inteiros, mas é possível mudar, o que por sua vez exige o uso de **cast explícito**.
 
 ```csharp
 //exemplo1
@@ -191,4 +191,47 @@ public enum Dia
 ```
 
 > No exemplo1 Domingo = 0 (zero), ou seja, é possível definir o valor para cada constante, mas quando não definido o valor inicial é 0 (zero).
+
+**string/String:** string ou String é uma matriz de caracteres **imutável**, ou seja, seu valor não pode ser alterado depois de atribuído. Toda manipulação de string gera outra string como resultado.
+
+- Aceita caracteres de escape como **"\n"** para nova linha e **"\t"** para tabulação.
+- Para ignorar caracteres de escape podemos usar o símbolo "**@ (arroba)**".
+- Para concatenar strings podemos usar o símbolo "**+**".
+- Para comparar strings podemos usar o símbolo "**==**", porém é mais indicado o uso do método "_string1.**Equals(**_string2_**)**_".
+
+**Conversão:** conversão ou **cast** é a operação que deve ser realizada antes de se transferir o conteúdo de uma variável para outra de variável de tipo diferente. Existem dois tipos de conversão, **implícita** e **explícita**. 
+
+- A conversão explícita é necessária quando ocorre a transferência de uma variável de um tipo de dado "maior" para outra variável de um tipo de dado "menor".
+```csharp
+double numero = 12.3;
+int parteInteira = (int) numero;
+```
+> No caso acima, como a variável double "não cabe" em um variável int somos obrigados a explicitar o cast.
+
+- A conversão implícita ou transparente ocorre na transferência de uma variável de um tipo de dado "menor" para outra variável de um tipo de dado "maior".
+```csharp
+int menor = 10;
+long maior = menor;
+```
+> No caso acima, como a variável int "cabe" em uma variável long não é preciso explicitar o cast. Tudo é feito de forma transparente.
+
+**Método com _params_:** recurso que pode ser usado na passagem de muitos parâmetros de um mesmo tipo.
+
+```csharp
+int Somar(params int[] numeros)
+{
+    int soma = 0;
+    foreach (int numero in numeros)
+    {
+        soma += numero;
+    }
+    return soma;
+}
+//usando
+Somar(1,4);
+Somar(2,6,8);
+Somar(3,8,9,2,3);
+```
+
+> O recurso _params_ pode ser usado com outros parâmetros, porém o parâmetro _params_ deve ser sempre o último.
 
