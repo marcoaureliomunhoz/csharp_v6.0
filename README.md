@@ -1,7 +1,6 @@
 # Recursos do C# até versão 6.0
 
-**Classe Object:**  
-Toda classe em C# descende direta ou indiretamente da classe Object. Qualquer classe criada em C# possui no mínimo os seguintes membros:
+**Classe Object:** toda classe em C# descende direta ou indiretamente da classe Object. Qualquer classe criada em C# possui no mínimo os seguintes membros:
 
 Membro | Descrição
 --- | ---
@@ -21,7 +20,7 @@ Console.WriteLine("{0}", 51.Equals("uma boa ideia"));
 Console.WriteLine("{0}", 51.Equals("51"));
 Console.WriteLine("{0}", 51.Equals(51));
 
-//Implicitamente Ponto extende Object
+//Implicitamente Ponto estende Object
 public class Ponto
 {
     private int _x = 0;
@@ -71,4 +70,74 @@ Console.WriteLine("{0}", p2.ToString());
 Console.WriteLine("{0}", p1.Equals(p2));
 p1.SetPosicao(p2.GetX(), p2.GetY());
 Console.WriteLine("{0}", p1.Equals(p2));
+```
+
+**Variáveis:** ao declarar uma variável no C# é preciso determinar o tipo de dado que será "armazenado". Por isso dizemos que C# é **type safe**.
+
+**Tipos Básicos:** no C# os tipos básicos também são objetos. As palavras reservadas para os tipos básicos são apenas _alias_ para os tipos "reais" do **CTS (Common Type System)**.
+
+Tipo Básico (alias) | Tipo Real (CTS) | Faixa de Valores
+--- | --- | ---
+bool | System.Boolean | true ou false
+byte | System.Byte | 0 a 255
+sbyte | System.SByte | -128 a 127
+char | System.Char | 
+decimal | System.Decimal | 
+double | System.Double | 
+float | System.Single | 
+int | System.Int32 | 
+long | System.Int64 | 
+short | System.Int16 | -32.768 a 32.767
+ushort | System.UInt16 | 0 a 65.535
+uint | System.UInt32 | 
+ulong | System.UInt64 | 
+string | System.String | 
+Object | System.Object | 
+
+```csharp
+short valorInt16 = 16;
+int valorInt32 = 32;
+long valorInt64 = 64;
+byte menorByte = 0;
+sbyte menorSByte = -128;
+float valorFloat = 3.4f;
+
+Console.WriteLine("{0}", valorInt16.GetType());
+Console.WriteLine("{0}", valorInt32.GetType());
+Console.WriteLine("{0}", valorInt64.GetType());
+Console.WriteLine("{0}", menorByte.GetType());
+Console.WriteLine("{0}", menorSByte.GetType());
+Console.WriteLine("{0}", valorFloat.GetType());
+```
+
+**Como as variáveis são armazenadas:** o armazenamento depende do tipo de referência, se for **value type** (por valor) o dado é armazenado diretamente na **stack** (pilha), se for **reference type** (por referência) o dado fica armazenado na **heap** e um ponteiro para o dado fica armazenado na stack.
+
+- Value Type: 
+    - Contém o dado;
+    - Ao passar uma variável por valor é feita uma cópia do dado;
+    - Operações em uma variável não afetam a sua cópia, pois elas são independentes;
+    - Ao passar tipos básicos a referência padrão é por valor.
+
+- Reference Type:
+    - O dado fica na heap e um ponteiro fica na stack;
+    - Ao passar uma variável por referência é feita uma cópia do ponteiro;
+    - Operações em uma variável afetam a sua cópia, pois elas apontam para o mesmo dado;
+    - Ao passar objetos a referência padrão é por referência.
+
+**Constantes:** constantes são variáveis cujo valor não pode ser alterado em tempo de execução e a definição do valor **deve** ser feita na declaração.
+
+```csharp
+const double PI = 3.1415;
+```
+
+**Inferência de Tipo:** recurso introduzido no C# 3.0, onde não é necessário explicitar o tipo da variável. Na compilação o tipo é inferido com base no valor atribuido.
+
+```csharp
+//declaração com tipagem explícita
+int numero = 10;
+string nome = "marco";
+
+//declaração com tipagem implícita (inferência)
+var numero = 10;
+var nome = "marco";
 ```
