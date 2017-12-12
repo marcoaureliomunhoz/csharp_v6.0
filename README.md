@@ -141,3 +141,54 @@ string nome = "marco";
 var numero = 10;
 var nome = "marco";
 ```
+
+**Struct:** estrutura é um tipo de dado complexo. Sua declaração é parecida com a de uma classe. A principal diferença entre _struct_ e _class_ é que na _struct_ o armazenamento padrão é por valor e na _class_ é por referência. Isso significa que ao passar uma _struct_ é feita uma cópia de todo o seu conteúdo.
+
+- Não existe herança entre structs.
+- São alocadas na _stack_ (pilha) e não na _heap_ (memória).
+- Podemos implementar _interfaces_.
+- Aceita construtores, atributos/propriedades e métodos. Os construtores devem ser customizados.
+- Não aceita destrutores.
+- Não aceita métodos virtuais (não tem sentido, pois não existe herança).
+
+```csharp
+//sintaxe de declaração
+[modificador] struct <nome> : [interface]
+{
+    //membros...
+}
+
+//usando
+<struct_nome> variavel = new <struct_nome>([parametros_do_construtor]);
+```
+
+**Enum:** enum é um tipo de dado para lista de constantes. Por padrão as constantes são associados a valores inteiros, mas é possível mudar, o que por sua vez exige o uso de **cast explícito**.
+
+```csharp
+//exemplo1
+public enum Dia 
+{
+    Domingo,
+    Segunda,
+    Terca,
+    Quarta,
+    Quinta,
+    Sexta,
+    Sabado
+};
+
+//exemplo2
+public enum Dia
+{
+    Domingo = 1,
+    Segunda = 2, 
+    Terca   = 3,
+    Quarta  = 4,
+    Quinta  = 5,
+    Sexta   = 6,
+    Sabado  = 7
+};
+```
+
+> No exemplo1 Domingo = 0 (zero), ou seja, é possível definir o valor para cada constante, mas quando não definido o valor inicial é 0 (zero).
+
