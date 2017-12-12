@@ -266,8 +266,8 @@ int[,] quadrado1 = {{10,11} , {50,51}};
 
 //declarando matriz sem inicialização
 int[,] quadrado2 = new int[2,2];
-triangulo[0,0] = 10;
-triangulo[0,1] = 11;
-triangulo[1,0] = 50;
-triangulo[1,1] = 51;
+quadrado2[0,0] = 10;
+quadrado2[0,1] = 11;
+quadrado2[1,0] = 50;
+quadrado2[1,1] = 51;
 ```
