@@ -344,3 +344,80 @@ public void GravarLogEmBD(string log)
 > Fica claro que entre o emissor primário e o método final existe uma intermediação. Essa intermediação é feita pela classe genérica EventHandler que por sua vez sabe lidar com delegates que estendem EventArgs.
 
 - Vamos supor a seguinte situação: eu tenho um botão customizado que toda vez que o usuário clica nele a cor do fundo é alterada de forma aleatória. Uma forma de descobrir a cor deste botão imediatamente à alteração seria usar uma thread ou um timer e ficar monitorando a cor do botão em comparação a uma cor salva em memória. Porém existe uma forma mais elegante de solucionar esse problema. A ideia é utilizar evento baseado em **EventArgs** e **EventHandler**.
+
+**Expressões Lambda:** é um recurso que contribui para aumentar a produtividade e a legibilidade quando estamos lidando com expressões previsíveis. Você escreve só o código essencial e o compilador, nos bastidores, infere (gera) o código completo. 
+
+> Nos bastidores o compilador usa delegates **Func<>** ou **Action<>** que são delegates genéricos e prontos para plugarmos métodos sem ter que ficar definindo delegates no código.
+
+- Vejamos:
+```csharp
+public delegate int DelegCalc(int v);
+
+public int Quadrado(int x)
+{
+    return x * x;
+}
+
+//usando
+DelegCalc calc = new DelegCalc(Quadrado);
+calc(2);
+```
+
+- No exemplo acima a função Quadrado é muito simples e fácil para se  inferir. Vejamos como a substituição por uma expressão lambda reduz o código e aumenta a legibilidade.
+```csharp
+public delegate int DelegCalc(int v);
+
+//usando
+DelegCalc calcEx = new DelegCalc(x => x * x);
+calcEx(2);
+```
+
+- Com o uso do delegate **Func<>** é possível reduzir ainda mais o código acima. 
+```csharp
+public Func<int,int> quadrado = x => x * x;
+
+//usando
+quadrado(2);
+```
+
+> **Func<e1,e2,e3,..,en>**: o elemento _en_ indica o tipo do dado/valor que o método retornará e os demais elementos anteriores a _en_ indicam a quantidade de parâmetros e o tipo de cada um. Func é usado em métodos com retorno. Para métodos sem retorno (void) usa-se **Action**.
+
+- Agora um exemplo mais complexo de Func com expressão lambada.
+```csharp
+public Func<int,double,string> concatenar = (a, b) => a.ToString() + b.ToString();
+
+//usando
+concatenar(5,6.7);
+```
+
+**Tipo Anônimo:** é mais uma "mão" do compilador para nos auxiliar na definição de classes simples e contextuais. 
+
+- Vejamos:
+```csharp
+var pessoa = new { Nome = "Marco", Idade = 18 };
+```
+
+> O exemplo acima se trata de um tipo anônimo que nos bastidores o compilador se encarregará de gerar algo assim:
+
+```csharp
+internal class NomeGeradoPeloCompilador
+{
+    private string _nome;
+    private int _idade;
+    public NomeGeradoPeloCompilador(string nome, int idade)
+    {
+        _nome = nome;
+        _idade = idade;
+    }
+    public string Nome { get { return _nome; } }
+    public int Idade { get { return _idade; } }
+}
+```
+
+> e a trocará a chamada por:
+
+```csharp
+NomeGeradoPeloCompilador pessoa = new NomeGeradoPeloCompilador("Marco", 18);
+```
+
+> Ao utilizar o recurso de tipo anônimo sempre devemos usar a keyword **var**.
