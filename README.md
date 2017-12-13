@@ -271,3 +271,70 @@ quadrado2[0,1] = 11;
 quadrado2[1,0] = 50;
 quadrado2[1,1] = 51;
 ```
+
+**Coleções:** recurso que também serve para armazenar vários dados, porém não é necessário definir a quantidade de elementos, pois a alocação é dinâmica.
+
+- Tipos de Coleções:
+    - List
+    - ArrayList
+    - HashTable
+    - Dictionary
+    - SortedList
+
+> Além da alocação dinâmica que já nos traz uma grande vantagem as coleções nos fornecem uma série de membros (métodos e atributos/propriedades) que facilitam muito o desenvolvimento.
+
+- Alguns membros comuns:
+    - **Add(**_elemento_**)**: método que adiciona um novo elemento da coleção.
+    - **Remove(**_elemento_**)**: método que remove um elemento da coleção.
+    - **Clear()**: método que "limpa" uma coleção.
+    - **IndexOf(**_elemento_**)**: método que retorna a posição de um dado elemento.
+
+**Generics:** mecanismo que permite a definição de certas classes, métodos, delegates e outros recursos sem exigir a definição primária de tipo. A definição de tipo, nestes casos, deve se feita ao declarar os recursos.
+
+> Um exemplo de recurso que foi construído/definido com base no mecanismo de generics é a classe **List**. Na sua construção/definição não existe definição de tipo, a definição de tipo é feita ao declarar a lista.
+
+```csharp
+List<int> inteiros = new List<int>();
+List<string> strings = new List<string>();
+List<Ponto> pontos = new List<Ponto>();
+```
+
+**Delegate:** é uma classe especial que tem a capacidade de armazenar e gerenciar uma coleção de métodos/funções. É como se fosse uma lista de métodos/funções. No C# não tem como passar métodos/funções por parâmetro, mas tem como passar um objeto. É aí que entra o delegate, pois ele é um objeto que carrega métodos/funções e com ele podemos passar métodos/funções por parâmetro de forma indireta.
+
+> Vamos supor a seguinte situação: eu preciso realizar uma série de operações em memória e no final gravar o log destas operações em banco de dados e avisar o usuário sobre o ocorrido. Não tem como na minha aplicação eu ficar esperando o final das operações pois pode demorar e o usuário certamente vai ficar irritado. Para evitar que o usuário se irrite o ideal é usar thread. Mas introduzir a gravação do log em base de dados dentro da thread não fica legal, até porque eu já tenho uma camada que se comunica com a base de dados. É aí que entra o delegate. A solução seria então implementar um delegate que receba como parâmetro uma string, passar esse delegate para a thread que ao final do processamento aciona o delegate, que por sua vez chama a função delegada na camada de apresentação que por sua vez aciona a camada de dados e ainda dá um feedback ao usuário que por sua vez :)
+
+```csharp
+//olha como é simples declarar um delegate
+//por baixo dos panos o C# gera uma classe
+//que aceita e gerencia métodos com a assinatura abaixo
+public delegate void DelegLog(string log);
+
+//aqui é o momento em que o usuário aciona uma operação que desencadeia uma série de operações
+public void btnProcessar_Click(object sender, EventArgs e)
+{
+    //o parâmetro do construtor de MinhaThread espera um delegate
+    //neste caso o delegate aponta para apenas um método
+    //portanto basta passar o nome do método
+    MinhaThread mt = new MinhaThread(GravarLogEmBD);
+
+    //poderíamos fazer assim também, mas a forma anterior é mais elegante quando o delegate aponta para apenas um método
+    MinhaThread mt = new MinhaThead(new DelegLog(GravarLogEmBD));
+}
+
+//aqui o método para o qual será delegado
+public void GravarLogEmBD(string log)
+{
+    //aqui aciona a camada de dados
+    //...
+    //aqui avisa o usuário
+    MessageBox.Show("Blá blá blá blá!");
+}
+```
+
+- Outras observações sobre delegate:
+    - Um delegate pode referenciar vários métodos (**delegate multicast**). Para isso devemos utilizar o operador **"+"**.
+    - Para remover um método do delegate usamos o operador **"-"**.
+    - Ao acionar um delegate que referencia vários métodos todos os métodos serão chamados de acordo com a sequencia de referenciamento.
+    - Uma outra forma de invocar um delegate de forma mais explicita é através do método **Invoke**. Veja como ficaria o exemplo acima: deleg.Invoke("log...")
+    - Todo delegate possui a propriedade **Target** que aponta para a instância do método delegado.
+    - Todo delegate possui a propriedade **Method** que indica se o delegate possui ou não pelo menos um método delegado.
