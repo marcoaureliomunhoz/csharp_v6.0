@@ -299,8 +299,19 @@ quadrado2[1,1] = 51;
     - List
     - ArrayList
     - HashTable
-    - Dictionary
     - SortedList
+    - LinkedList
+    - Queue
+    - Stack
+    - Dictionary
+    - SortedDictionary
+
+- Interfaces Importantes:
+    - IEnumerable: presente no namespace _System.Collection_ serve de base para todos os tipos de coleções. É mais apropriada para lidar com fontes de dados locais e em memória, pois trabalha com base em **delegates**. Nos bastidores o compilador usa **delegates** para resolver consultas e isso significa que uma consulta na base de dados, mesmo com filtro informado, o filtro será realizado do lado do cliente, ou seja, a tabela inteira será trazida para a memória e em memória através de delegates do compilador resolve a consulta e o filtro.
+    - ICollection
+    - IReadOnlyList
+    - IReadOnlyCollection
+    - IQueryable: presente no namespace _System.Linq_ serve como base para as coleções suportarem LINQ e recursos como _lazy loading_. É mais apropriada para lidar com fontes de dados remotas, pois suporta paginação e trabalha com **expressions**. Nos bastidores o compilador usa **expressions** para resolver consultas e isso significa que no caso de uma consulta na base de dados com filtro, o filtro será realizado do lado do servidor, ou seja, antes de enviar a instrução sql para o gerenciador de banco de dados o compilador resolve as **expressions** e gera uma instrução sql mais complexa e que resulta num volume menor de dados como retorno.
 
 > Além da alocação dinâmica que já nos traz uma grande vantagem as coleções nos fornecem uma série de membros (métodos e atributos/propriedades) que facilitam muito o desenvolvimento.
 
@@ -607,4 +618,69 @@ protected override void ModelCreating(DbModelBuilder modelBuilder)
             - Orderby
         - Projeção por tipos anônimos:
             - var resultado = from reg in ctx.Editoras where reg.Nome.Contains("Brasil") select new { reg.EditoraId, reg.Nome };
+    - Muito cuidado com o tipo da coleção em consultas com LINQ. Em retornos convertidos para IEnumerable o compilador usa delegates e neste caso os filtros são feitos no lado do cliente. Em retornos convertidos para IQueryable o compilador usa expressions e neste caso os filtros são feitos no lado do servidor. O simples fato de indicar o tipo do retorno pode resultar em perda de performance, principalmente quando estamos lhe dando com um grande volume de dados (em pequenos volumes não sentimos grande diferença).
 
+**Manipulando Arquivos Texto:** a maioria dos recursos voltados para manipulação de arquivo texto estão no namespace **System.IO**.
+
+- Na base de tudo está a classe **Stream**:
+    - Length: retorna o tamanho em bytes do fluxo.
+    - Position: retorna ou define a posição corrente do fluxo.
+    - CanRead: indica se o fluxo atual oferece suporte à leitura.
+    - CanWrite: indica se o fluxo atual oferece suporte à escrita.
+    - CanSeek: indica se o fluxo atual oferece suporte à busca.
+    - BeginRead(): inicia uma operação de leitura assíncrona.
+    - EndRead(): aguarda a leitura assíncrona pendente terminar.
+    - BeginWrite(): inidica uma operação de escrita assíncrona.
+    - EndWrite(): termina uma operação de escrita assíncrona.
+    - Dispose(): libera recursos (como soquetes e identificadores de arquivos) associados ao fluxo.
+    - Close(): fecha o fluxo e libera recursos.
+    - CopyTo(Stream): copia os dados do fluxo para uma Stream.
+    - Flush(): limpa todos os buffers para esse fluxo e faz com que alguns dados armazenados em buffer sejam gravados no dispositivo subjacente.
+    - Read(): lê uma sequência de bytes de fluxo atual e avança a posição no fluxo pelo número de bytes lidos.
+    - Write(): grava uma sequência de bytes no fluxo atual e avança a posição atual dentro desse fluxo pelo número de bytes escritos.
+    - Seek(): define a posição corrente.
+    - SetLength(): define o tamanho do fluxo.
+
+- Classes e métodos importantes para manipulação de arquivos texto:
+    - **File**: classe estática que fornece métodos comuns de acesso a arquivo.
+        - File.Exists("caminho_completo")
+        - File.Create("caminho_completo)
+    - **StreamWriter**: classe que serve para escrever em arquivos texto. Esta classe deriva da classe abstrata **TextWriter**.
+    - **StreamReader**: classe que serve para ler arquivos texto. Esta classe deriva da classe abstrata **TextReader**.
+
+- Propriedades e métodos da classe StreamWriter:
+    - Write()
+    - WriteLine()
+    - NewLine()
+    - Flush()
+    - Dispose()
+    - Close()
+
+- Propriedade e métodos da classe StreamReader:
+    - Read()
+    - ReadLine()
+    - ReadBlock()
+    - ReadToEnt()
+    - Peek()
+    - Dispose()
+    - Close()
+
+**Manipulando XML:** a maioria dos recursos voltados para manipulação de XML estão nos namespaces **System.Xml**, **System.Xml.Linq** e **System.Data.Linq**.
+
+- Para ler XML: 
+    - **XmlTextReader**: classe que nos permite percorrer um XML, de forma rápida, para mapear ou buscar elementos e dados.
+    - **XmlDocument**: classe que representa um XML com base no padrão **Document Object Model (DOM)**, onde cada nó do documento é representado por uma classe derivada (**XmlAttribute, XmlDocument, XmlDocumentFragment, XmlEntity, XmlLinkedNode, e XmlNotation**) da classe abstrata **XMLNode**.
+    - **XPath**: linguagem de alto nível baseada no padrão **XSLT** que facilita a navegação em arquivos XML representados no padrão DOM. Em "XPath" um documento é "enxergado" como uma estrutura de diretórios. As classes DOM fornecem dois métodos de seleção XPath: o método **SelectSingleNode** e o método **SelectNodes**. O método SelectSingleNode retorna o primeiro nó que corresponde aos critérios de seleção. O método SelectNodes retorna um XmlNodeList que contém os nós correspondentes.
+    - **LINQ to XML**: conjunto de recursos para leitura e escrita baseados em LINQ.
+
+- Para criar/escrever XML:
+    - **XmlTextWriter**
+    - **XmlDocument**
+    - **LINQ to XML**
+
+**Manipulando JSON:** JSON significa JavaScript Object Notation e é um padrão aberto para representar dados como atributos com valores. Originalmente derivado da sintaxe do JavaScript (daí o seu nome) para uso em aplicações web como uma alternativa ao XML, é agora usado para serialização de dados e de transporte em muitas aplicações standalone e web. JSON fornece um meio ideal para encapsular os dados entre o cliente e o servidor. Dessa forma, JSON é um protocolo leve para intercâmbio de dados e está baseado em um subconjunto da linguagem de programação JavaScript, sendo independente desta e de qualquer linguagem. (Macoratti)
+
+- Algumas opções para trabalhar com JSON:
+    - Opção 1: classe assembly **DataContractJsonSerializer** presente no namespace **System.Runtime.Serialization**.
+    - Opção 2: biblioteca **Json.NET** (também conhecida como **Newtonsoft**). Essa biblioteca é obtida através de **NuGet Package**.
+    - Opção 3: biblioteca **Jil**, famosa por ser mais performática que as outras bibliotecas. Essa biblioteca é obtida através de **NuGet Package**.
