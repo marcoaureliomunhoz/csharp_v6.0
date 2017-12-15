@@ -684,3 +684,375 @@ protected override void ModelCreating(DbModelBuilder modelBuilder)
     - Opção 1: classe assembly **DataContractJsonSerializer** presente no namespace **System.Runtime.Serialization**.
     - Opção 2: biblioteca **Json.NET** (também conhecida como **Newtonsoft**). Essa biblioteca é obtida através de **NuGet Package**.
     - Opção 3: biblioteca **Jil**, famosa por ser mais performática que as outras bibliotecas. Essa biblioteca é obtida através de **NuGet Package**.
+
+**Programação Paralela:** Muitos computadores pessoais e estações de trabalho possuem dois ou quatro núcleos (ou seja, CPUs) que permitem a execução de várias threads ao mesmo tempo. Em um futuro próximo, espera-se que os computadores possuam um número de núcleos significativamente maior. Para tirar proveito do hardware de hoje e do futuro, podemos paralelizar o código para distribuir o trabalho entre vários processadores. É possível fazer a manipulação em baixo nível de threads e de bloqueios, mas a partir do .NET Framework 4 o suporte à programação paralela foi aprimorado com a disponibilização de um novo tempo de execução, novos tipos de biblioteca de classes e novas ferramentas de diagnóstico. Esses novos recursos simplificam o desenvolvimento paralelo para que seja possível escrever código paralelo eficiente, refinado e dimensionável em uma linguagem natural sem precisar trabalhar diretamente com threads ou com pool de threads. (Guia do .NET)
+
+- Como era antes: uma das formas de gerar paralelismo é através da classe **Thread** que fica no namespace **System.Threading**. Ao utilizarmos esse recurso a sincronização de threads fica por nossa responsabilidade. A sincronização é necessária quando temos duas ou mais threads acessando recursos em comum. Nesses casos, o namespace System.Threading fornece as seguintes classes para sincronização de threads: **Mutex**, **Monitor**, **Interlocked**, **AutoResetEvent** e **ManualResetEvent**. Além destas classes podemos utilizar a **instrução lock** que implicitamente implementa _Monitor_ e consequentemente facilita a nossa vida.
+
+```csharp
+static void Main(string[] args)
+{
+    Console.WriteLine("# inicio thread principal");
+
+    var threadParalela = new Thread(ThreadParalela_Run);
+    threadParalela.Start();
+
+    for (var i = 0; i < 100; i++)
+    {
+        Console.WriteLine($"# passo thread principal ... {i}");
+        Thread.Sleep(500);
+    }
+
+    Console.WriteLine("# fim thread principal");
+}
+
+static void ThreadParalela_Run()
+{
+    Console.WriteLine("@ inicio thread paralela");
+    for (var i = 0; i < 100; i++)
+    {
+        Console.WriteLine($"@ passo thread paralela ... {i}");
+        Thread.Sleep(500);
+    }
+    Console.WriteLine("@ fim thread paralela");
+}
+```
+
+- E agora: a partir do .NET Framework 4, a programação multi-threading foi simplificada com as classes **System.Threading.Tasks.Parallel** e **System.Threading.Tasks.Task**, com **PLINQ (LINQ Paralelo)**, com as novas classes de _coleta simultânea_ no namespace **System.Collections.Concurrent** e um novo _modelo de programação assíncrona baseada em tarefas (TAP)_ em vez de threads. 
+
+> Task é um dos componentes centrais do modelo de programação assíncrona baseado em tarefas e é uma implementação do [Modelo Promise de assincronia](https://en.wikipedia.org/wiki/Futures_and_promises).
+
+```csharp
+static void Main(string[] args)
+{
+    Console.WriteLine("# inicio thread principal");
+
+    var threadParalela = Task.Run(() => {
+        Console.WriteLine("@ inicio thread paralela");
+        for (var i = 0; i < 100; i++)
+        {
+            Console.WriteLine($"@ passo thread paralela ... {i}");
+            Thread.Sleep(500);
+        }
+        Console.WriteLine("@ fim thread paralela");
+    });
+
+    for (var i = 0; i < 100; i++)
+    {
+        Console.WriteLine($"# passo thread principal ... {i}");
+        Thread.Sleep(500);
+    }
+
+    Console.WriteLine("# fim thread principal");
+
+    Console.ReadKey();
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    Console.WriteLine("# main - ini #");
+
+    //executa o processo principal e aguarda
+    ProcessoPrincipal().Wait();
+
+    Console.WriteLine("# main - fim #");
+    
+    Console.ReadKey();
+}
+
+static async Task ProcessoPrincipal()
+{
+    //processamento inicial
+    for (int i = 0; i < 5; i++)
+    {
+        Console.WriteLine("Processo1");
+        Thread.Sleep(500);
+    }
+
+    //cria uma task especial que executa em paralelo
+    var processo2 = ProcessoAsync();
+
+    //aqui não precisamos do retorno de processo2
+    //então podemos executar
+    for (int i = 0; i < 5; i++)
+    {
+        Console.WriteLine("Processo3");
+        Thread.Sleep(500);
+    }
+
+    //aqui precisamos do resultado do processo2
+    //não podemos continuar, temos que esperar
+    var resultado = await processo2;
+
+    //agora sim, depois de obter o resultado do processo2
+    //podemos executar o processo4
+    for (int i = 0; i < 5; i++)
+    {
+        Console.WriteLine($"Processo4 => {resultado}");
+        Thread.Sleep(500);
+    }
+}
+
+//processamento "pesado"
+static async Task<string> ProcessoAsync()
+{
+    for (int i=0; i<5; i++)
+    {
+        Console.WriteLine("ProcessoAsync - bloco1");
+    }
+
+    Console.WriteLine("ProcessoAsync - bloco2");
+
+    //quando chegar aqui, ou seja, ao encontrar um await dentro de um método async Task
+    //é que o processamento assíncrono ocorre
+    await Task.Delay(10000);
+
+    for (int i = 0; i < 5; i++)
+    {
+        Console.WriteLine("ProcessoAsync - bloco3");
+    }
+
+    return "resultado_do_processamento_assincrono";
+}
+```
+
+- Referências
+    - [docs.microsoft.com/.../index](https://docs.microsoft.com/pt-br/dotnet/standard/parallel-programming/index)
+    - [docs.microsoft.com/.../threading](https://docs.microsoft.com/pt-br/dotnet/csharp/programming-guide/concepts/threading/)
+    - [albahari.com/threading](http://www.albahari.com/threading/)
+
+**Novidades do C# 6.0**
+
+- **Using Static Class Statements**: com a importação de classes estáticas não precisamos ficar fazendo referência à classes estáticas toda vez que vamos usar um método estático. Um exemplo clássico são os métodos da classe **System.Console**.
+
+> Como era antes
+
+```csharp
+using System;
+
+static void Main(string[] args)
+{
+    Console.WriteLine("Blá Blá Blá ...");
+    Console.ReadKey();
+}
+```  
+
+> Agora podemos 
+
+```csharp
+using System;
+using static System.Console;
+
+static void Main(string[] args)
+{
+    WriteLine("Blá Blá Blá ...");
+    ReadKey();
+}
+```
+
+- **Auto Property Initializer**
+
+> Como era antes
+
+```csharp
+public class Editora 
+{
+    public string Nome { get; set; }
+    public string Pais { get; set; }
+
+    public Editora()
+    {
+        Nome = "";
+        Pais = "Brasil";
+    }
+}
+```
+
+> Agora podemos
+
+```csharp
+public class Editora 
+{
+    public string Nome { get; set; } = "";
+    public string Pais { get; set; } = "Brasil";
+}
+```
+
+- **Expression Bodied Members:** não precisamos informar as chaves de abertura e fechamento para métodos simples.
+
+```csharp
+using System;
+using static System.Console;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        WriteLine(GetDataFormatada());
+        WriteLine(GetDataFormatadaExp());
+        ReadKey();
+    }
+
+    //Sem Expression
+    static string GetDataFormatada()
+    {
+        return "Hoje é " + DateTime.Now.ToLongDateString();
+    }
+
+    //Com Expression
+    static string GetDataFormatadaExp() => "Hoje é " + DateTime.Now.ToLongDateString();
+}
+```
+
+- **String Interpolation:** facilita a formatação de strings.
+
+```csharp
+using System;
+using static System.Console;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        //formatando string com concatenação e conversões
+        var forma1 = "Hoje é " + DateTime.Now.ToLongDateString();
+        WriteLine(forma1);
+
+        //formatando string com o auxílio de um método especial
+        var forma2 = String.Format("Hoje é {0}", DateTime.Now.ToLongDateString());
+        WriteLine(forma2);
+
+        //formatando string com interpolação
+        var forma3 = $"Hoje é {DateTime.Now.ToLongDateString()}";
+        WriteLine(forma3);
+
+        ReadKey();
+    }
+}
+```
+
+- **Null Propagation Operator:** facilita o tratamento de instâncias nulas. Uma alternativa mais verbosa seria usar o operador ternário.
+
+```csharp
+using System;
+using static System.Console;
+
+class Editora
+{
+    public int Codigo { get; set; }
+    public string Nome { get; set; }
+
+    public override string ToString()
+    {
+        return $"[ Codigo: {Codigo}, Nome: {Nome} ]";
+    }
+}
+
+class Livro
+{
+    public int Codigo { get; set; }
+    public string Nome { get; set; }
+    public Editora Editora { get; set; }
+
+    public override string ToString()
+    {
+        //aqui pode dar erro se Editora não for uma instância
+        //é aí que entra o operador de propagação de null
+        return $"[ Codigo: {Codigo}, Nome: {Nome}, Editora: {Editora?.ToString() ?? "<null>"} ]";
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Editora novatec = new Editora();
+        novatec.Codigo = 1;
+        novatec.Nome = "novatec";
+
+        Livro useCabeca = new Livro();
+        useCabeca.Codigo = 1;
+        useCabeca.Nome = "Use a Cabeça";
+        useCabeca.Editora = novatec;
+
+        Livro phpModerno = new Livro();
+        phpModerno.Codigo = 2;
+        phpModerno.Nome = "PHP Moderno";
+
+        WriteLine(useCabeca.ToString());
+        WriteLine(phpModerno.ToString());
+
+        ReadKey();
+    }
+}
+```
+
+- **Nameof Operator:** com o operador nameof fica fácil substituir nomes de recursos concatenados em strings de log. Sem este recurso somos obrigados a concatenar o nome literal.
+
+```csharp
+using System;
+using static System.Console;
+
+class Calculadora
+{
+    public int Somar(int a, int b) => a + b;
+}
+
+class Program
+{
+    static Calculadora recurso1;
+
+    static void Main(string[] args)
+    {
+        Metodo1();
+        Metodo2();
+        ReadKey();
+    }
+
+    static void Metodo1()
+    {
+        try
+        {
+            recurso1.Somar(2, 2);
+        }
+        catch (Exception ex)
+        {
+            //WriteLine($"Erro ao acessar recurso1: {ex.Message}");
+            WriteLine($"Erro ao acessar {nameof(recurso1)}: {ex.Message}");
+        }
+    }
+
+    static void Metodo2()
+    {
+        try
+        {
+            recurso1.Somar(3, 3);
+        }
+        catch (Exception ex)
+        {
+            //WriteLine($"Erro ao acessar recurso1: {ex.Message}");
+            WriteLine($"Erro ao acessar {nameof(recurso1)}: {ex.Message}");
+        }
+    }
+}
+```
+
+- **Exception Filtering:** podemos incluir uma estrutura condicional em um **catch** para tomadas de decisões antes de entrar no bloco catch.
+
+```csharp
+try
+{
+    int n = 0;
+    int x = 10 / n;
+}
+catch (Exception ex) when (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+{
+    //envia e-mail para o gerente
+}
+catch (Exception ex)
+{
+    //envia e-mail para o suporte
+} 
+```
