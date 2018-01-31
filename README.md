@@ -560,7 +560,7 @@ public class MeuContextoDb : DbContext
 }
 ```
 
-- Removendo convensões:
+- Removendo convensões com Fluent API:
 
 ```csharp
 protected override void ModelCreating(DbModelBuilder modelBuilder)
