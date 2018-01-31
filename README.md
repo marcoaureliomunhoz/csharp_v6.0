@@ -532,8 +532,8 @@ class Program
 
 . | Centrado no Modelo | Centrado no Código 
 --- | --- | --- 
-Banco não existe | Model First | Code First
-Banco já existe | Database First | Code First
+Banco não existe | Model First - o banco é gerado a partir de arquivos EDMX | Code First - o banco é gerado por migrations a partir de classes, mapeamentos e convenções
+Banco já existe | Database First - engenharia reversa gera os arquivos EDMX | Code First - engenharia reversa gera as classes e os mapeamentos
 
 - Conceitos:
     - Change Tracking: rastreamento de mudanças.
