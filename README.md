@@ -572,7 +572,7 @@ protected override void ModelCreating(DbModelBuilder modelBuilder)
 }
 ```
 
-- Configurando propriedades:
+- Configurando propriedades com Fluent API:
 
 ```csharp
 protected override void ModelCreating(DbModelBuilder modelBuilder)
@@ -584,7 +584,7 @@ protected override void ModelCreating(DbModelBuilder modelBuilder)
 }
 ```
 
-- Configurando através de mapeamento (Fluent API):
+- Configurando através de mapeamento com Fluent API:
 
 ```csharp
 public class EditoraMap : EntityTypeConfiguration<Editora> 
